@@ -22,6 +22,20 @@
     { key: "city", label: "City", patterns: [/\bcity\b/i, /\btown\b/i, /address-level2/i] },
     { key: "state", label: "State / province", patterns: [/\bstate\b/i, /province/i, /address-level1/i] },
     { key: "zip", label: "Postal / ZIP code", patterns: [/\bzip\b/i, /postal/i, /postcode/i] },
-    { key: "country", label: "Country", patterns: [/country/i] }
+    { key: "country", label: "Country", patterns: [/country/i] },
+
+    // Common screening questions (yes/no selects on most ATS sites)
+    { key: "workAuthorized", label: "Authorized to work", patterns: [/authorized.{0,15}work/i, /legally.{0,10}(authorized|work)/i] },
+    { key: "needsSponsorship", label: "Needs visa sponsorship", patterns: [/sponsorship/i, /sponsor.{0,10}visa/i] },
+    { key: "over18", label: "Over 18", patterns: [/over.?18/i, /18.?years.?of.?age/i] },
+    { key: "driversLicense", label: "Driver's license", patterns: [/driver'?s?\s*license/i] },
+    { key: "backgroundCheckConsent", label: "Background check consent", patterns: [/background.?check/i, /e-?verify/i] },
+
+    // Voluntary demographic (EEO) questions — left blank in your profile
+    // unless you choose to fill them in, since they're optional by law.
+    { key: "genderIdentity", label: "Gender", patterns: [/\bgender\b/i, /\bsex\b/i] },
+    { key: "raceEthnicity", label: "Race / ethnicity", patterns: [/\brace\b/i, /ethnicity/i] },
+    { key: "disabilityStatus", label: "Disability status", patterns: [/disability/i] },
+    { key: "veteranStatus", label: "Veteran status", patterns: [/veteran/i] }
   ];
 })();

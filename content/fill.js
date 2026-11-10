@@ -69,12 +69,29 @@
     return true;
   }
 
+  // Phrasings that different sites use for the same EEO answer. If your saved
+  // profile value matches one of these groups, any phrasing in that group is
+  // accepted — so you don't have to guess each site's exact wording.
+  const SELECT_SYNONYM_GROUPS = [
+    [/decline/i, /prefer not/i, /opt.?out/i, /not.?wish/i, /not.?specified/i, /undisclosed/i, /do not wish/i]
+  ];
+
+  function synonymMatch(wanted, optionText) {
+    for (const group of SELECT_SYNONYM_GROUPS) {
+      const wantedIsInGroup = group.some(p => p.test(wanted));
+      const optionIsInGroup = group.some(p => p.test(optionText));
+      if (wantedIsInGroup && optionIsInGroup) return true;
+    }
+    return false;
+  }
+
   function setSelect(el, value) {
     const wanted = String(value).trim().toLowerCase();
     const options = Array.from(el.options);
     const match =
       options.find(o => o.text.trim().toLowerCase() === wanted || o.value.trim().toLowerCase() === wanted) ||
-      options.find(o => o.text.trim().toLowerCase().includes(wanted));
+      options.find(o => o.text.trim().toLowerCase().includes(wanted)) ||
+      options.find(o => synonymMatch(wanted, o.text.trim().toLowerCase()));
     if (!match || match.value === "") return false;
     el.value = match.value;
     el.dispatchEvent(new Event("change", { bubbles: true }));

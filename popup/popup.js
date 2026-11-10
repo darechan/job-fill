@@ -3,7 +3,9 @@
 const PROFILE_FIELDS = [
   "firstName", "lastName", "fullName", "email", "phone", "linkedin", "github",
   "portfolio", "currentCompany", "currentTitle", "school", "degree",
-  "yearsExperience", "salary", "addressLine1", "city", "state", "zip", "country"
+  "yearsExperience", "salary", "addressLine1", "city", "state", "zip", "country",
+  "workAuthorized", "needsSponsorship", "over18", "driversLicense", "backgroundCheckConsent",
+  "genderIdentity", "raceEthnicity", "disabilityStatus", "veteranStatus"
 ];
 
 const form = document.getElementById("profileForm");

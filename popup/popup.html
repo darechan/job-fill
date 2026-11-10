@@ -41,6 +41,51 @@
       <label>State / province <input type="text" name="state" /></label>
       <label>Postal / ZIP code <input type="text" name="zip" /></label>
       <label>Country <input type="text" name="country" /></label>
+
+      <h3>Screening questions</h3>
+      <label>Authorized to work in the US?
+        <select name="workAuthorized">
+          <option value="">— Not set —</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </label>
+      <label>Need visa sponsorship?
+        <select name="needsSponsorship">
+          <option value="">— Not set —</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </label>
+      <label>Over 18?
+        <select name="over18">
+          <option value="">— Not set —</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </label>
+      <label>Have a driver's license?
+        <select name="driversLicense">
+          <option value="">— Not set —</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </label>
+      <label>Agree to background check?
+        <select name="backgroundCheckConsent">
+          <option value="">— Not set —</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </label>
+
+      <h3>Voluntary demographic info (optional)</h3>
+      <p class="hint">These are legally optional on every application. Leave blank to skip and answer them yourself each time, or fill in once to answer the same way everywhere.</p>
+      <label>Gender <input type="text" name="genderIdentity" placeholder="e.g. Female, Decline to self-identify" /></label>
+      <label>Race / ethnicity <input type="text" name="raceEthnicity" placeholder="e.g. Decline to self-identify" /></label>
+      <label>Disability status <input type="text" name="disabilityStatus" placeholder="e.g. No, Decline to self-identify" /></label>
+      <label>Veteran status <input type="text" name="veteranStatus" placeholder="e.g. No, Decline to self-identify" /></label>
+
       <button type="submit" class="primary">Save profile</button>
       <span id="saveStatus" class="hint"></span>
     </form>
