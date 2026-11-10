@@ -8,7 +8,10 @@ server, no account, and no hosting involved.
 
 - You fill in your details once in the popup (name, email, links, work
   history, address, and so on) and save them.
-- You pick a resume file in the popup.
+- You pick a resume file in the popup. You can also click **Scan resume**
+  to have it read your PDF/DOCX and draft your work experience and education
+  entries automatically — review and fix the results before saving, since
+  this is pattern-matching, not perfect, and resume formats vary a lot.
 - On any job application page, click **Fill this page**. The extension scans
   the visible form fields, matches them to your saved details, and fills
   them in.
@@ -96,3 +99,6 @@ chrome-extension/
 
 Your profile and resume are stored only in Chrome's local extension storage
 on your own machine (`chrome.storage.local`). Nothing is sent anywhere.
+Resume scanning also runs entirely in your browser (via the bundled `pdf.js`
+and `mammoth.js` libraries in `vendor/`) — the file never leaves your
+computer, and no API key or account is needed.

@@ -17,6 +17,8 @@
     <h2>Resume</h2>
     <input type="file" id="resumeInput" accept=".pdf,.doc,.docx" />
     <div id="resumeName" class="hint"></div>
+    <button type="button" id="scanResumeBtn" class="secondary" disabled>Scan resume for work history &amp; education</button>
+    <div id="scanStatus" class="hint"></div>
   </section>
 
   <section>
@@ -129,6 +131,9 @@
     <span id="saveStatus" class="hint"></span>
   </section>
 
+  <script src="../vendor/pdf.min.js"></script>
+  <script src="../vendor/mammoth.browser.min.js"></script>
+  <script src="resumeParser.js"></script>
   <script src="popup.js"></script>
 </body>
 </html>

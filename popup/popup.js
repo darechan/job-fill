@@ -35,6 +35,8 @@ const fillBtn = document.getElementById("fillBtn");
 const fillStatus = document.getElementById("fillStatus");
 const resumeInput = document.getElementById("resumeInput");
 const resumeName = document.getElementById("resumeName");
+const scanResumeBtn = document.getElementById("scanResumeBtn");
+const scanStatus = document.getElementById("scanStatus");
 const workList = document.getElementById("workList");
 const eduList = document.getElementById("eduList");
 
@@ -98,7 +100,10 @@ function loadProfile() {
       const el = form.querySelector('[name="' + field + '"]');
       if (el) el.value = profile[field] || "";
     }
-    if (data.resume) resumeName.textContent = "Saved: " + data.resume.name;
+    if (data.resume) {
+      resumeName.textContent = "Saved: " + data.resume.name;
+      scanResumeBtn.disabled = false;
+    }
 
     workList.innerHTML = "";
     (data.workHistory || []).forEach(entry => workList.appendChild(buildEntryCard(WORK_FIELDS, entry)));
@@ -133,9 +138,36 @@ resumeInput.addEventListener("change", () => {
     const resume = { name: file.name, type: file.type, data: base64 };
     chrome.storage.local.set({ resume }, () => {
       resumeName.textContent = "Saved: " + file.name;
+      scanResumeBtn.disabled = false;
     });
   };
   reader.readAsDataURL(file);
+});
+
+scanResumeBtn.addEventListener("click", async () => {
+  scanStatus.textContent = "Scanning...";
+  scanResumeBtn.disabled = true;
+  try {
+    const { resume } = await chrome.storage.local.get(["resume"]);
+    if (!resume) throw new Error("No resume saved yet.");
+
+    const { workHistory, education } = await window.__scanResumeForHistory(resume);
+
+    workList.innerHTML = "";
+    workHistory.forEach(entry => workList.appendChild(buildEntryCard(WORK_FIELDS, entry)));
+
+    eduList.innerHTML = "";
+    education.forEach(entry => eduList.appendChild(buildEntryCard(EDU_FIELDS, entry)));
+
+    scanStatus.textContent =
+      "Found " + workHistory.length + " work entr" + (workHistory.length === 1 ? "y" : "ies") +
+      " and " + education.length + " education entr" + (education.length === 1 ? "y" : "ies") +
+      ". Review and fix anything wrong below, then Save profile.";
+  } catch (err) {
+    scanStatus.textContent = "Couldn't scan resume: " + err.message;
+  } finally {
+    scanResumeBtn.disabled = false;
+  }
 });
 
 fillBtn.addEventListener("click", async () => {
