@@ -75,3 +75,36 @@ button.primary:hover {
   margin-top: 6px;
   white-space: pre-line;
 }
+
+button.secondary {
+  width: 100%;
+  padding: 7px;
+  background: #eef2ff;
+  color: #2563eb;
+  border: 1px solid #c7d2fe;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  margin-top: 4px;
+}
+
+.entryCard {
+  border: 1px solid #e2e2e2;
+  border-radius: 6px;
+  padding: 8px;
+  margin-bottom: 8px;
+  background: #fafafa;
+}
+
+.entryCard label {
+  margin-bottom: 4px;
+}
+
+.removeBtn {
+  font-size: 11px;
+  color: #b91c1c;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px 0;
+}

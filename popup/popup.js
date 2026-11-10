@@ -1,38 +1,123 @@
-// Runs inside the popup window: loads/saves your profile and resume,
-// and tells the active tab's content script to fill the page.
+// Runs inside the popup window: loads/saves your profile, work history,
+// education, and resume; tells the active tab's content script to fill the page.
 const PROFILE_FIELDS = [
   "firstName", "lastName", "fullName", "email", "phone", "linkedin", "github",
   "portfolio", "currentCompany", "currentTitle", "school", "degree",
   "yearsExperience", "salary", "addressLine1", "city", "state", "zip", "country",
-  "workAuthorized", "needsSponsorship", "over18", "driversLicense", "backgroundCheckConsent",
+  "workAuthorized", "needsSponsorship", "citizenshipStatus", "over18", "driversLicense",
+  "backgroundCheckConsent", "nonCompete", "conflictOfInterest", "phoneType",
   "genderIdentity", "raceEthnicity", "disabilityStatus", "veteranStatus"
+];
+
+const WORK_FIELDS = [
+  { key: "jobTitle", label: "Job title", type: "text" },
+  { key: "company", label: "Company", type: "text" },
+  { key: "location", label: "Location", type: "text" },
+  { key: "current", label: "I currently work here", type: "checkbox" },
+  { key: "startDate", label: "Start", type: "text" },
+  { key: "endDate", label: "End", type: "text" },
+  { key: "description", label: "Description", type: "textarea" }
+];
+
+const EDU_FIELDS = [
+  { key: "school", label: "School", type: "text" },
+  { key: "degree", label: "Degree", type: "text" },
+  { key: "fieldOfStudy", label: "Field of study", type: "text" },
+  { key: "gpa", label: "GPA", type: "text" },
+  { key: "startDate", label: "Start year", type: "text" },
+  { key: "endDate", label: "End year", type: "text" }
 ];
 
 const form = document.getElementById("profileForm");
 const saveStatus = document.getElementById("saveStatus");
+const saveBtn = document.getElementById("saveBtn");
 const fillBtn = document.getElementById("fillBtn");
 const fillStatus = document.getElementById("fillStatus");
 const resumeInput = document.getElementById("resumeInput");
 const resumeName = document.getElementById("resumeName");
+const workList = document.getElementById("workList");
+const eduList = document.getElementById("eduList");
 
-function loadProfile() {
-  chrome.storage.local.get(["profile", "resume"], (data) => {
-    const profile = data.profile || {};
-    for (const field of PROFILE_FIELDS) {
-      const el = form.elements[field];
-      if (el) el.value = profile[field] || "";
+function buildEntryCard(fields, values) {
+  const card = document.createElement("div");
+  card.className = "entryCard";
+
+  for (const f of fields) {
+    const label = document.createElement("label");
+    label.textContent = f.label + " ";
+    let input;
+    if (f.type === "textarea") {
+      input = document.createElement("textarea");
+    } else if (f.type === "checkbox") {
+      input = document.createElement("input");
+      input.type = "checkbox";
+    } else {
+      input = document.createElement("input");
+      input.type = "text";
     }
-    if (data.resume) resumeName.textContent = "Saved: " + data.resume.name;
+    input.dataset.key = f.key;
+    if (f.type === "checkbox") input.checked = !!values[f.key];
+    else input.value = values[f.key] || "";
+    label.appendChild(input);
+    card.appendChild(label);
+  }
+
+  const removeBtn = document.createElement("button");
+  removeBtn.type = "button";
+  removeBtn.className = "removeBtn";
+  removeBtn.textContent = "Remove";
+  removeBtn.addEventListener("click", () => card.remove());
+  card.appendChild(removeBtn);
+
+  return card;
+}
+
+function readEntryCards(container, fields) {
+  return Array.from(container.children).map(card => {
+    const entry = {};
+    for (const f of fields) {
+      const input = card.querySelector('[data-key="' + f.key + '"]');
+      if (!input) continue;
+      entry[f.key] = f.type === "checkbox" ? input.checked : input.value.trim();
+    }
+    return entry;
   });
 }
 
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
+document.getElementById("addWork").addEventListener("click", () => {
+  workList.appendChild(buildEntryCard(WORK_FIELDS, {}));
+});
+document.getElementById("addEdu").addEventListener("click", () => {
+  eduList.appendChild(buildEntryCard(EDU_FIELDS, {}));
+});
+
+function loadProfile() {
+  chrome.storage.local.get(["profile", "resume", "workHistory", "education"], (data) => {
+    const profile = data.profile || {};
+    for (const field of PROFILE_FIELDS) {
+      const el = form.querySelector('[name="' + field + '"]');
+      if (el) el.value = profile[field] || "";
+    }
+    if (data.resume) resumeName.textContent = "Saved: " + data.resume.name;
+
+    workList.innerHTML = "";
+    (data.workHistory || []).forEach(entry => workList.appendChild(buildEntryCard(WORK_FIELDS, entry)));
+
+    eduList.innerHTML = "";
+    (data.education || []).forEach(entry => eduList.appendChild(buildEntryCard(EDU_FIELDS, entry)));
+  });
+}
+
+saveBtn.addEventListener("click", () => {
   const profile = {};
   for (const field of PROFILE_FIELDS) {
-    profile[field] = form.elements[field].value.trim();
+    const el = form.querySelector('[name="' + field + '"]');
+    if (el) profile[field] = el.value.trim();
   }
-  chrome.storage.local.set({ profile }, () => {
+  const workHistory = readEntryCards(workList, WORK_FIELDS);
+  const education = readEntryCards(eduList, EDU_FIELDS);
+
+  chrome.storage.local.set({ profile, workHistory, education }, () => {
     saveStatus.textContent = "Saved.";
     setTimeout(() => (saveStatus.textContent = ""), 1500);
   });
@@ -55,7 +140,8 @@ resumeInput.addEventListener("change", () => {
 
 fillBtn.addEventListener("click", async () => {
   fillStatus.textContent = "Filling...";
-  const { profile, resume } = await chrome.storage.local.get(["profile", "resume"]);
+  const { profile, resume, workHistory, education } =
+    await chrome.storage.local.get(["profile", "resume", "workHistory", "education"]);
 
   if (!profile) {
     fillStatus.textContent = "Save your profile first.";
@@ -72,8 +158,9 @@ fillBtn.addEventListener("click", async () => {
 
     const results = await chrome.scripting.executeScript({
       target: { tabId: tab.id, allFrames: true },
-      func: (profile, resume) => window.__jobAutofillRun(profile, resume),
-      args: [profile, resume || null]
+      func: (profile, resume, workHistory, education) =>
+        window.__jobAutofillRun(profile, resume, workHistory, education),
+      args: [profile, resume || null, workHistory || [], education || []]
     });
 
     const totals = { filled: 0, kept: 0, missing: [] };

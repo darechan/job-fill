@@ -21,7 +21,7 @@
 
   <section>
     <h2>Profile</h2>
-    <form id="profileForm">
+    <div id="profileForm">
       <label>First name <input type="text" name="firstName" /></label>
       <label>Last name <input type="text" name="lastName" /></label>
       <label>Full name <input type="text" name="fullName" /></label>
@@ -57,6 +57,7 @@
           <option value="No">No</option>
         </select>
       </label>
+      <label>Citizenship / residency status <input type="text" name="citizenshipStatus" placeholder="e.g. US Citizen, Green Card holder" /></label>
       <label>Over 18?
         <select name="over18">
           <option value="">— Not set —</option>
@@ -71,11 +72,33 @@
           <option value="No">No</option>
         </select>
       </label>
-      <label>Agree to background check?
+      <label>Agree to background check / drug test?
         <select name="backgroundCheckConsent">
           <option value="">— Not set —</option>
           <option value="Yes">Yes</option>
           <option value="No">No</option>
+        </select>
+      </label>
+      <label>Bound by a non-compete?
+        <select name="nonCompete">
+          <option value="">— Not set —</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </label>
+      <label>Any conflict of interest?
+        <select name="conflictOfInterest">
+          <option value="">— Not set —</option>
+          <option value="Yes">Yes</option>
+          <option value="No">No</option>
+        </select>
+      </label>
+      <label>Phone device type (optional)
+        <select name="phoneType">
+          <option value="">— Not set —</option>
+          <option value="Mobile">Mobile</option>
+          <option value="Home">Home</option>
+          <option value="Work">Work</option>
         </select>
       </label>
 
@@ -85,10 +108,25 @@
       <label>Race / ethnicity <input type="text" name="raceEthnicity" placeholder="e.g. Decline to self-identify" /></label>
       <label>Disability status <input type="text" name="disabilityStatus" placeholder="e.g. No, Decline to self-identify" /></label>
       <label>Veteran status <input type="text" name="veteranStatus" placeholder="e.g. No, Decline to self-identify" /></label>
+    </div>
+  </section>
 
-      <button type="submit" class="primary">Save profile</button>
-      <span id="saveStatus" class="hint"></span>
-    </form>
+  <section>
+    <h2>Work experience</h2>
+    <p class="hint">Most recent first. Dates as you'd type them (e.g. 05/2025). Add as many as you want auto-filled.</p>
+    <div id="workList"></div>
+    <button type="button" id="addWork" class="secondary">+ Add work experience</button>
+  </section>
+
+  <section>
+    <h2>Education</h2>
+    <div id="eduList"></div>
+    <button type="button" id="addEdu" class="secondary">+ Add education</button>
+  </section>
+
+  <section>
+    <button type="button" id="saveBtn" class="primary">Save profile</button>
+    <span id="saveStatus" class="hint"></span>
   </section>
 
   <script src="popup.js"></script>

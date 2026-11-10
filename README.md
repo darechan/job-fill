@@ -63,11 +63,32 @@ chrome-extension/
 └── README.md
 ```
 
-## Known limitations (MVP)
+## What it now handles
+
+- Flat contact/address fields, plus screening questions (work authorization,
+  visa sponsorship, citizenship status, age, driver's license, background
+  check/drug test consent, non-compete, conflict of interest) and voluntary
+  demographic (EEO) fields.
+- These screening questions whether a site renders them as a plain dropdown,
+  a Yes/No pair of radio buttons, or a custom "Select One" style widget
+  (common on Workday-style sites).
+- Multiple work experience and education entries (job title, company,
+  location, "currently work here", dates, description / degree, field of
+  study, GPA), including clicking "Add Another" to create enough blocks for
+  everything you've saved.
+
+## Known limitations
 
 - Essay/free-text questions are left for you to answer.
-- Some sites with heavily custom widgets (certain dropdowns, multi-step
-  wizards) may need extra handling later.
+- Chip-style searchable dropdowns (e.g. "How did you hear about us?", a
+  typeahead "Country" picker) aren't supported yet — these need
+  per-widget handling that hasn't been built.
+- Company-specific questions ("Have you worked for X before?") are
+  intentionally left for you, since they can't be answered generically.
+- Custom "Select One" widget support is best-effort: it opens the dropdown
+  and looks for a matching option, but every site's widget markup is a
+  little different, so it may not work everywhere yet. Let me know what you
+  hit and it can be refined.
 - One resume is stored at a time; switching jobs with different resumes
   means re-uploading each time.
 
