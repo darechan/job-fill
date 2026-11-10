@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Job Autofill",
+  "version": "0.1.0",
+  "description": "Fill job application forms from your saved profile with one click.",
+  "permissions": ["storage", "activeTab", "scripting", "unlimitedStorage"],
+  "action": {
+    "default_popup": "popup/popup.html",
+    "default_title": "Job Autofill"
+  }
+}

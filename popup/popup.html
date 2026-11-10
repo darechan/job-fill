@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Job Autofill</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <h1>Job Autofill</h1>
+
+  <section>
+    <button id="fillBtn" class="primary">Fill this page</button>
+    <div id="fillStatus" class="status"></div>
+  </section>
+
+  <section>
+    <h2>Resume</h2>
+    <input type="file" id="resumeInput" accept=".pdf,.doc,.docx" />
+    <div id="resumeName" class="hint"></div>
+  </section>
+
+  <section>
+    <h2>Profile</h2>
+    <form id="profileForm">
+      <label>First name <input type="text" name="firstName" /></label>
+      <label>Last name <input type="text" name="lastName" /></label>
+      <label>Full name <input type="text" name="fullName" /></label>
+      <label>Email <input type="email" name="email" /></label>
+      <label>Phone <input type="text" name="phone" /></label>
+      <label>LinkedIn <input type="text" name="linkedin" /></label>
+      <label>GitHub <input type="text" name="github" /></label>
+      <label>Portfolio / website <input type="text" name="portfolio" /></label>
+      <label>Current company <input type="text" name="currentCompany" /></label>
+      <label>Current job title <input type="text" name="currentTitle" /></label>
+      <label>School <input type="text" name="school" /></label>
+      <label>Degree <input type="text" name="degree" /></label>
+      <label>Years of experience <input type="text" name="yearsExperience" /></label>
+      <label>Salary expectation <input type="text" name="salary" /></label>
+      <label>Street address <input type="text" name="addressLine1" /></label>
+      <label>City <input type="text" name="city" /></label>
+      <label>State / province <input type="text" name="state" /></label>
+      <label>Postal / ZIP code <input type="text" name="zip" /></label>
+      <label>Country <input type="text" name="country" /></label>
+      <button type="submit" class="primary">Save profile</button>
+      <span id="saveStatus" class="hint"></span>
+    </form>
+  </section>
+
+  <script src="popup.js"></script>
+</body>
+</html>
